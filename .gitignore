@@ -43,3 +43,7 @@ virtual-data
 override.php
 captainhook.config.json
 captainhook.local.json
+
+# plugins
+/Customizing/global/plugins/Services
+!/Customizing/global/plugins/Services/Cron/CronHook/HelloWorld
