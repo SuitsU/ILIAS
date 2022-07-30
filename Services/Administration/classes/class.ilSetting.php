@@ -122,7 +122,7 @@ class ilSetting
     */
     public function get($a_keyword, $a_default_value = false)
     {
-        if ($a_keyword == "ilias_version") {
+        if ($a_keyword == "ilias_version") { # TODO GET VERSION NUMBER
             return ILIAS_VERSION;
         }
         
