@@ -19,17 +19,16 @@ if (file_exists("./ilias.ini.php")) {
         echo 'Option "studip" in ilias.ini.php is not enabled. You need to add studip = "1" to the server section.';
         exit();
     }
-    
-    if (isset($_GET['sess_id'])) {
-        setcookie(session_name(), $_GET['sess_id']);
-        $_COOKIE[session_name()] = $_GET['sess_id'];
+
+    // Do not accept session IDs from the query string (session fixation).
+    // Stud.IP must establish an authenticated server-side bridge instead of
+    // letting the client choose sess_id / client_id cookies.
+    if (isset($_GET['sess_id']) || isset($_GET['client_id'])) {
+        header('HTTP/1.1 400 Bad Request');
+        echo 'Session parameters via query string are not supported.';
+        exit();
     }
-    
-    if (isset($_GET['client_id'])) {
-        setcookie('ilClientId', $_GET['client_id']);
-        $_COOKIE['ilClientId'] = $_GET['client_id'];
-    }
-    
+
     require_once "./include/inc.header.php";
     
     $jump_to = 'index.php';

@@ -31,8 +31,17 @@ if (isset($_GET['return']) && isset($_GET['action']) && $_GET['action'] == 'logo
     // Destroy application session/cookie etc
     $GLOBALS['DIC']['ilAuthSession']->logout();
 
-    // Finally, send user to the return URL
-    ilUtil::redirect($_GET['return']);
+    // Only allow relative, same-site return targets (open-redirect hardening)
+    $return = (string) $_GET['return'];
+    if ($return === '' ||
+        strpos($return, '://') !== false ||
+        strpos($return, '//') === 0 ||
+        strpos($return, "\r") !== false ||
+        strpos($return, "\n") !== false
+    ) {
+        $return = 'index.php';
+    }
+    ilUtil::redirect($return);
 }
 
 // Back channel logout //

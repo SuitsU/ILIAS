@@ -298,12 +298,8 @@ class ilPasswordAssistanceGUI
             $pwassist_session['expires'] < time() ||
             true // comment by mjansen: wtf? :-)
         ) {
-            // Create a new session id
-            // #9700 - this didn't do anything before?!
-            // db_set_save_handler();
-            session_start();
+            // Cryptographically random token (must not be derived from session_id)
             $pwassist_session['pwassist_id'] = db_pwassist_create_id();
-            session_destroy();
             db_pwassist_session_write(
                 $pwassist_session['pwassist_id'],
                 3600,
