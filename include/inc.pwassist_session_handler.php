@@ -63,11 +63,14 @@ function db_pwassist_session_close()
 * - It is a non-uniformly distributed (pseudo) random value
 * - Only a non-substantial number of bits can be predicted from
 *   previously generated id's.
+*
+* IMPORTANT: Do not derive this from session_id(). Using md5(session_id())
+* (via ilSession::_duplicate) made the password-assistance key predictable
+* to the party requesting the reset, enabling account takeover.
 */
 function db_pwassist_create_id()
 {
-    // #26009 we use ilSession to duplicate the existing session
-    return \ilSession::_duplicate(session_id());
+    return bin2hex(random_bytes(32));
 }
 
 /*

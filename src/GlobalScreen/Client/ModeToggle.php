@@ -34,6 +34,15 @@ class ModeToggle
         $new_mode = $current_mode == self::MODE1 ? self::MODE2 : self::MODE1;
         setcookie(self::GS_MODE, $new_mode, 0, "/");
         $_COOKIE[ItemState::COOKIE_NS_GS] = "";
-        header('Location: ' . $_SERVER['HTTP_REFERER']);
+
+        $target = 'ilias.php';
+        if (!empty($_SERVER['HTTP_REFERER']) && defined('ILIAS_HTTP_PATH')) {
+            $referer = (string) $_SERVER['HTTP_REFERER'];
+            $base = rtrim(ILIAS_HTTP_PATH, '/') . '/';
+            if (strpos($referer, $base) === 0) {
+                $target = $referer;
+            }
+        }
+        header('Location: ' . $target);
     }
 }
